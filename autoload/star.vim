@@ -34,17 +34,22 @@ function! star#visual(g)
   " it's prefixed with \<, and if it ends at the end of a word, then it's
   " suffixed with \>.
   if visualmode() ==# ''
-    " In Visual blockwise mode the beginning of the Visual mode area isn't
-    " always '<, and the end of the Visual mode area isn't always '>.
-    let [lnum_1, vcol_1] = [line("'<"), virtcol("'<")]
-    let [lnum_2, vcol_2] = [line("'>"), virtcol("'>")]
+    " To define the outline of the selection, set `vcol_s` to its leftmost
+    " virtual column and `vcol_e` to its rightmost virtual column. Note that
+    " the leftmost virtual column isn't always in '<, and the rightmost
+    " virtual column isn't always in '>, so swap them if they're inverted.
+    " Furthermore when 'selection' is "exclusive", if, and only if,
+    " virtcol("'<") < virtcol("'>"), then the virtual column of '> isn't part
+    " of the selected text.
+    let [vcol_s, vcol_e] = [virtcol("'<"), virtcol("'>")]
+    if vcol_s < vcol_e
+      if &selection ==# 'exclusive' | let vcol_e -= 1 | endif
+    else
+      let [vcol_s, vcol_e] = [vcol_e, vcol_s]
+    endif
 
-    " Set `vcol_s` to the leftmost virtual column number in the selection,
-    " `vcol_e` to the rightmost virtual column number in the selection, and
-    " `lnum_s` to the first line number in the selection.
-    let vcol_s = min([vcol_1, vcol_2])
-    let vcol_e = max([vcol_1, vcol_2])
-    let lnum_s = min([line("'<"), line("'>")])
+    " Set `lnum_s` " to the first line of the selection
+    let lnum_s = line("'<")
 
     let result = []
     for [lnum, string] in map(text, "[lnum_s + v:key, v:val]")
@@ -98,6 +103,9 @@ function! star#visual(g)
 
     " Suffix the search with \> if it's matchable with that suffix
     let [_, lnum, col, _] = getpos("'>")
+    " When 'selection' is "exclusive", '> is one column past the last column
+    " in the text
+    if &selection ==# 'exclusive' | let col -= 1 | endif
     let line = getline(lnum)
     let suffix = match(line, '\%' . col . 'c.\>') > -1 ? '\>' : ''
 
