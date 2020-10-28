@@ -18,16 +18,13 @@ bracket the search while `g*` and `g#` don't.
 In characterwise Visual mode, with `*` and `#`, if the selected text would be
 matched by a search beginning with `\<`, then `\<` is added to the beginning of
 the search. Likewise, if the selected text would be matched by a search ending
-with `\>`, then `\>` is added to the end of the search. Basically, **if you
-selected whole words then `*` and `#` search for whole words**. `g*` and `g#`
-don't put `\<` and `\>` around the search.
-
-In characterwise Visual mode (`v`) and linewise Visual mode (`V`), `*`, `#`,
-`g*`, and `g#` search for the selected text, leaving the cursor on the first
-character of the selection.
-
+with `\>`, then `\>` is added to the end of the search. Basically, **in
+characterwise Visual mode, if you selected whole words then `*` and `#` search
+for whole words**. `g*` and `g#` don't put `\<` and `\>` around the search.
 
 In linewise Visual mode (`V`), `*` and `#` surround the search with `^` and `$`.
+Basically, **in linewise Visual mode, `*` and `#` search for whole lines**. `g*`
+and `g#` don't put `^` and `$` around the search.
 
 In blockwise Visual mode (`CTRL-v`):
 
