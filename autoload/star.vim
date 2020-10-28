@@ -52,7 +52,7 @@ function! star#visual(g)
       " past the last virtual column on this line. We can't just test if the
       " line is empty() because Vim will assign text to this line even in this
       " case.
-      let vcol_l = virtcol([lnum, '$'])
+      let vcol_l = virtcol([lnum, '$']) - 1
       if vcol_s > vcol_l | continue | endif
 
       if !a:g
