@@ -30,6 +30,12 @@ Blockwise Visual mode (`CTRL-v`) is handled by treating every line in the
 selected text as a separate characterwise Visual mode selection. The searches
 are the combined with `\|`.
 
+### Operator-pending Mode
+
+`*`, `g*`, `#`, and `g#` in Operator-pending mode behave like they do in normal
+mode, followed by `gn` (or `gN` in the case of `#` and `g#`). Only the `gn` part
+is repeated if `.` is subsequently used.
+
 Installation
 ------------
 
