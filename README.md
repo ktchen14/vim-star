@@ -38,9 +38,9 @@ direction is backwards instead of forwards.
 
 ### Operator-pending Mode
 
-`*`, `g*`, `#`, and `g#` in Operator-pending mode behave like they do in normal
-mode, followed by `gn` (or `gN` in the case of `#` and `g#`). Only the `gn` part
-is repeated if `.` is subsequently used.
+`*` and friends in Operator-pending mode behave like they do in normal mode,
+followed by `gn` (or `gN` in the case of `#` and `g#`). Only the `gn` part is
+repeated if `.` is subsequently used.
 
 Installation
 ------------
