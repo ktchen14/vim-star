@@ -26,7 +26,9 @@ In linewise Visual mode (`V`), `*` and `#` surround the search with `^` and `$`.
 Basically, **in linewise Visual mode, `*` and `#` search for whole lines**. `g*`
 and `g#` don't put `^` and `$` around the search.
 
-In blockwise Visual mode (`CTRL-v`):
+Blockwise Visual mode (`CTRL-v`) is handled by treating every line in the
+selected text as a separate characterwise Visual mode selection. The searches
+are the combined with `\|`.
 
 Installation
 ------------
