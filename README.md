@@ -14,16 +14,20 @@ left on the first character of the current match.
 `*` and `g*` search for the selected text, exiting Visual mode and leaving the
 cursor on the first character of the selection.
 
-In characterwise Visual mode, with `*`, if the selected text would be matched by
-a search beginning with `\<` then `\<` is added to the beginning of the search.
-Likewise, if the selected text would be matched by a search ending with `\>`
-then `\>` is added to the end of the search. Basically, **in characterwise
-Visual mode, if you selected whole words then `*` searches for whole words**.
-`g*` doesn't't put `\<` and `\>` around the search.
+#### Characterwise Visual Mode (`v`)
 
-In linewise Visual mode (`V`), `*` surrounds the search with `^` and `$`.
-Basically, **in linewise Visual mode, `*` searches for whole lines**. `g*`
-doesn't put `^` and `$` around the search.
+With `*`, if the selected text would be matched by a search beginning with `\<`
+then `\<` is added to the beginning of the search. Likewise, if the selected
+text would be matched by a search ending with `\>` then `\>` is added to the end
+of the search. Basically, **if you selected whole words then `*` searches for
+whole words**. `g*` doesn't put `\<` and `\>` around the search.
+
+#### Linewise Visual Mode (`V`)
+
+`*` surrounds the search with `^` and `$`. Basically, **`*` searches for whole
+lines**. `g*` doesn't put `^` and `$` around the search.
+
+#### Blockwise Visual Mode (`CTRL-v`)
 
 Blockwise Visual mode (`CTRL-v`) is handled by treating every line in the
 selected text as a separate characterwise Visual mode selection. The searches
