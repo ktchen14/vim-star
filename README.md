@@ -38,9 +38,9 @@ direction is backwards instead of forwards.
 
 ### Operator-pending Mode
 
-`*` and friends in Operator-pending mode behave like they do in normal mode,
-followed by `gn` (or `gN` in the case of `#` and `g#`). Only the `gn` part is
-repeated if `.` is subsequently used.
+`*` and friends behave like they do in normal mode followed by `gn` (or `gN` in
+the case of `#` and `g#`). Only the `gn` part is repeated if `.` is subsequently
+used.
 
 Installation
 ------------
@@ -52,3 +52,11 @@ Plug 'ktchen14/vim-star'
 ```
 
 [vim-plug]: https://github.com/junegunn/vim-plug
+
+Alternatives
+------------
+
+- [vim-asterisk](https://github.com/haya14busa/vim-asterisk)
+- [vim-star](https://github.com/linjiX/vim-star)
+- [vim-visual-star-search](https://github.com/bronson/vim-visual-star-search)
+- [vim-visualstar](https://github.com/thinca/vim-visualstar)
