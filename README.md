@@ -6,8 +6,8 @@ become a general search command.
 
 ### Normal Mode
 
-`*`, `g*`, `#`, and `g#` have their usual behavior, except that the cursor is
-left on the first character of the current match.
+`*` and friends have their usual behavior, except that the cursor is left on the
+first character of the current match.
 
 ### Visual Mode
 
