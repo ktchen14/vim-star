@@ -1,7 +1,7 @@
-" We can't just escape \ in `text` and use \V (very nomagic) as that'd record
-" an item in the search history (and echo a message) different from what
-" would've been recorded by * and #. Thus we have to handle &magic and escape
-" each special character here.
+" Escape `string` so that it's usable as a search term. We can't just escape \
+" and use \V (very nomagic) as that'd record an item in the search history
+" (and echo a message) different from what would've been recorded by * and #.
+" Thus we have to handle &magic and escape each special character here.
 function! s:escape_string(string)
   return escape(a:string, &magic ? '*^$.~[]\' : '^$\')
 endfunction
