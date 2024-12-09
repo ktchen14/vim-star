@@ -21,11 +21,48 @@ function! star#visual(g)
   " text and type of @v before this operation and restore it afterward. To
   " read the yanked text from @v, getreg(..., list = 1) must be used so that
   " NULs aren't clobbered.
-  let save_text = getreg('v', 1, 1)
   let save_type = getregtype('v')
+  if !empty(save_type)
+    let save_text = getreg('v', 1, 1)
+  endif
+
   silent! normal! gv"vy
   let text = getreg('v', 1, 1)
-  call setreg('v', save_text, save_type)
+
+  if !empty(save_type)
+    call setreg('v', save_text, save_type)
+  endif
+
+  " In linewise Visual mode, search only for entire lines that match the
+  " selection
+  if visualmode() ==# 'V'
+    return (a:g ? '' : '<') . s:escape(text) . (a:g ? '' : '$')
+
+  " In characterwise Visual mode, if the selection begins with the beginning
+  " of a word then prefix the search with \<, and if the selection ends at the
+  " end of a word then suffix the search with \>.
+  elseif visualmode() ==# 'v'
+    " In the g variant just return the escaped search itself
+    if a:g | return s:escape(text) | endif
+
+    let [prefix, suffix] = ['', '']
+
+    " Prefix the search with \< if it's matchable with that prefix
+    let [_, lnum, col, _] = getpos("'<")
+    if match(getline(lnum), '\<\%' . col . 'c.') > -1
+      let prefix = '\<'
+    endif
+
+    " Suffix the search with \> if it's matchable with that suffix. We have to
+    " adjust the column from getpos() when 'selection' is "exclusive". In this
+    " case, '> is one column past the last column in the text.
+    let lnum = line("'>")
+    let col = col("'>") - (&selection ==# 'exclusive')
+    if match(getline(lnum), '\%' . col . 'c.\>') > -1
+      let suffix = '\>'
+    endif
+
+    return prefix . s:escape(text) . suffix
 
   " In blockwise Visual mode, each line in the selection is interpreted as a
   " separate branch to be joined with \| in the actual search. The non-g
@@ -33,7 +70,7 @@ function! star#visual(g)
   " Visual mode. That is, if a line begins with the beginning of a word, then
   " it's prefixed with \<, and if it ends at the end of a word, then it's
   " suffixed with \>.
-  if visualmode() ==# ''
+  elseif visualmode() ==# ''
     " To define the outline of the selection, set `vcol_s` to its leftmost
     " virtual column and `vcol_e` to its rightmost virtual column. Note that
     " the leftmost virtual column isn't always in '<, and the rightmost
@@ -81,35 +118,6 @@ function! star#visual(g)
     endfor
 
     return join(result, '\|')
-  endif
-
-  " In the g variant just return the escaped search itself
-  if a:g | return s:escape(text) | endif
-
-  " In linewise Visual mode, search only for entire lines that match the
-  " selection
-  if visualmode() ==# 'V'
-    return '^' . s:escape(text) . '$'
-  endif
-
-  " In characterwise Visual mode, if the selection begins with the beginning
-  " of a word then prefix the search with \<, and if the selection ends at the
-  " end of a word then suffix the search with \>.
-  if visualmode() ==# 'v'
-    " Prefix the search with \< if it's matchable with that prefix
-    let [_, lnum, col, _] = getpos("'<")
-    let line = getline(lnum)
-    let prefix = match(line, '\<\%' . col . 'c.') > -1 ? '\<' : ''
-
-    " Suffix the search with \> if it's matchable with that suffix
-    let [_, lnum, col, _] = getpos("'>")
-    " When 'selection' is "exclusive", '> is one column past the last column
-    " in the text
-    if &selection ==# 'exclusive' | let col -= 1 | endif
-    let line = getline(lnum)
-    let suffix = match(line, '\%' . col . 'c.\>') > -1 ? '\>' : ''
-
-    return prefix . s:escape(text) . suffix
   endif
 
   return search " Just in case (Neo)Vim gets a new kind of Visual mode
@@ -162,7 +170,7 @@ function! star#search(type, search)
 
   let @/ = a:search
   call histadd('/', a:search)
-  echom a:type . a:search
+  echo a:type . a:search
   return [a:type == '/', 1]
 endfunction
 
